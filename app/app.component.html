@@ -1,0 +1,11 @@
+<!-- app.component.html -->
+<div>
+  <input type="text" [(ngModel)]="searchTerm">
+  <button (click)="searchGifs()">Search</button>
+</div>
+
+<div *ngFor="let gif of gifs" class="gif-card">
+  <img [src]="gif.url" alt="{{ gif.title }}" />
+  <p>{{ gif.title }}</p>
+</div>
+
