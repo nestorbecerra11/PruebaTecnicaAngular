@@ -1,25 +1,31 @@
-// app.component.ts
 import { Component } from '@angular/core';
 import { GiphyService } from './giphy.service';
-import { Gif } from './gif';
-
-
 
 @Component({
-  selector: 'app-root',
+  selector: 'app-root', 
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
+
 export class AppComponent {
-  searchTerm: string = ''; // Agrega esta línea
-  gifs: Gif[] = [];
+
+  gifs: any[] = [];
+  searchTerm = '';
 
   constructor(private giphyService: GiphyService) {}
 
-
-  onSearch(query: string) {
-    this.giphyService.getGifs(query).subscribe((gifs: Gif[]) => { 
-      this.gifs = gifs;
+  searchGifs() {
+    this.giphyService.getGifs(this.searchTerm).subscribe(response => {
+      if (Array.isArray(response)) {
+        // Si la respuesta es un array, simplemente asigna la respuesta
+        this.gifs = response as any[];
+      } else if (response && 'data' in response) {
+        // Si la respuesta es un objeto con una propiedad 'data', asigna esa propiedad
+        this.gifs = response['data'] as any[];
+      } else {
+        // Maneja otros casos según sea necesario
+        console.warn('Respuesta de la API no válida:', response);
+      }
     });
   }
 }
